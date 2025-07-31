@@ -6,7 +6,6 @@ Simlple example of user registration, login and CRUD action with backend restAPI
 
 This project is just to help MERN stack beginners learn the basics, intentionally made for our students at [Volunteer Tech®](https://volunteer-tech.com/) as a reference material. 
 
-[![flow](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/development/MERN.gif)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/development/MERN.gif)
 
 ### This Project is a Simple ReactJS Project which demonstrates the following
 ##### Backend

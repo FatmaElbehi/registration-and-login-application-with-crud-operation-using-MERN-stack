@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import swal from "sweetalert";
 import { Button, TextField, Link } from "@material-ui/core";
 import { withRouter } from "./utils";
-const axios = require("axios");
-const bcrypt = require("bcryptjs");
+import axios from 'axios'; 
+import bcrypt from 'bcryptjs'; 
 var salt = bcrypt.genSaltSync(10);
 
 class Login extends React.Component {
