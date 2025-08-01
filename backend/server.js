@@ -256,50 +256,49 @@ app.post("/delete-product", (req, res) => {
   }
 });
 
-/* API to get and search product with pagination and search by name */
+/*Api to get and search product with pagination and search by name*/
 app.get("/get-product", (req, res) => {
   try {
-    const query = {
+    var query = {};
+    query["$and"] = [];
+    query["$and"].push({
       is_delete: false,
       user_id: req.user.id
-    };
-
+    });
     if (req.query && req.query.search) {
-      query.name = { $regex: req.query.search, $options: 'i' }; // ajout $options pour ignore case
+      query["$and"].push({
+        name: { $regex: req.query.search }
+      });
     }
-
-    const perPage = 5;
-    const page = parseInt(req.query.page) || 1;
-
-    product.find(query, { date: 1, name: 1, id: 1, desc: 1, price: 1, discount: 1, image: 1 })
-      .skip((perPage * page) - perPage)
-      .limit(perPage)
+    var perPage = 5;
+    var page = req.query.page || 1;
+    product.find(query, { date: 1, name: 1, id: 1, desc: 1, price: 1, discount: 1 })
+      .skip((perPage * page) - perPage).limit(perPage)
       .then((data) => {
-        product.countDocuments(query)
+        product.find(query).count()
           .then((count) => {
-            res.status(200).json({
-              status: true,
-              title: data.length > 0 ? 'Products retrieved.' : 'No products found.',
-              products: data,
-              current_page: page,
-              total: count,
-              pages: Math.ceil(count / perPage),
-            });
-          })
-          .catch((countErr) => {
-            res.status(400).json({
-              errorMessage: countErr.message || countErr,
-              status: false
-            });
+            if (data && data.length > 0) {
+              res.status(200).json({
+                status: true,
+                title: 'Product retrived.',
+                products: data,
+                current_page: page,
+                total: count,
+                pages: Math.ceil(count / perPage),
+              });
+            } else {
+              res.status(400).json({
+                errorMessage: 'There is no product!',
+                status: false
+              });
+            }
           });
-      })
-      .catch((findErr) => {
+      }).catch(err => {
         res.status(400).json({
-          errorMessage: findErr.message || findErr,
+          errorMessage: err.message || err,
           status: false
         });
       });
-
   } catch (e) {
     res.status(400).json({
       errorMessage: 'Something went wrong!',
